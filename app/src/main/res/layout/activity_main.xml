@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView"
+        android:layout_gravity="center_vertical" >
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@mipmap/reg_title"
+                android:columnCount="4"
+                android:rowCount="1">
+
+                <ImageButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageButton2"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@mipmap/go_return" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/gohome"
+                    android:id="@+id/textView13"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#FFFFFFFF"
+                    android:textSize="20dp"
+                    android:textIsSelectable="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView"
+                    android:src="@mipmap/person_head"
+                    android:layout_marginTop="10dp"
+                    android:layout_column="3"
+                    android:layout_marginRight="10dp" />
+
+            </GridLayout>
+
+            <GridLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:rowCount="1"
+                android:columnCount="4">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_columnSpan="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageButton
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageButton3"
+                        android:layout_column="0"
+                        android:layout_columnSpan="1"
+                        android:background="@mipmap/main_guahao" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_guahao"
+                        android:id="@+id/textView17"
+                        android:textAlignment="center"
+                        android:autoText="false"
+                        android:layout_marginTop="5dp"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_columnSpan="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageButton
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageButton4"
+                        android:background="@mipmap/main_wenzhen"
+                        android:layout_marginTop="5dp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_wenzhen"
+                        android:id="@+id/textView18"
+                        android:textAlignment="center"
+                        android:layout_marginTop="5dp"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp">
+
+                    <ImageButton
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageButton5"
+                        android:background="@mipmap/main_huifang" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_huifang"
+                        android:id="@+id/textView19"
+                        android:textAlignment="center"
+                        android:textSize="20dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="14dp">
+
+                    <ImageButton
+                        android:layout_width="80dp"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/imageButton6"
+                        android:layout_marginLeft="dpdp"
+                        android:background="@mipmap/main_illness" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/main_illness"
+                        android:id="@+id/textView20"
+                        android:textAlignment="center"
+                        android:textSize="20dp" />
+                </LinearLayout>
+            </GridLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

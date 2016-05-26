@@ -3,6 +3,7 @@ package com.dfy.hospital_app;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -15,6 +16,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -27,10 +29,16 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import android.telephony.TelephonyManager;
+
+import com.dfy.data.DataReadWrite;
+import com.dfy.user.UserEntity;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -57,24 +65,27 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private UserLoginTask mAuthTask = null;
 
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
+
+    private TelephonyManager telephonyManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (EditText) findViewById(R.id.email);
         populateAutoComplete();
+        //findViewById(R.id.customViewAccount).setVisibility(View.INVISIBLE);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                if (id == R.id.button_dire || id == EditorInfo.IME_NULL) {
                     attemptLogin();
                     return true;
                 }
@@ -90,8 +101,51 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        Button mLuguo = (Button)findViewById(R.id.button_dire);
+        mLuguo.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onLogin();
+            }
+        });
+
+        ImageButton mExit = (ImageButton)findViewById(R.id.imageButton);
+        mExit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onExit();
+            }
+        });
+
+        View mView = findViewById(R.id.textView_forget);
+        mView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onForgetPassword();
+            }
+        });
+
         mLoginFormView = findViewById(R.id.login_form);
         mProgressView = findViewById(R.id.login_progress);
+
+        TelephonyManager tmMgr = (TelephonyManager)this.getSystemService(Context.TELEPHONY_SERVICE);
+        String strMobileCode = tmMgr.getLine1Number();
+        if(strMobileCode == null || strMobileCode.length() <= 0)
+        {
+            mEmailView.setText("13883955803");
+            PersonImformation.m_strAccount = "13883955803";
+        }
+       else {
+            mEmailView.setText(strMobileCode);
+            PersonImformation.m_strAccount = strMobileCode;
+        }
+
+        DataReadWrite.initSharedPreference(getApplicationContext());
+        String strPassOld = DataReadWrite.getInstance().getUser().getPassword();
+        if(strPassOld != null && !strPassOld.isEmpty())
+            mPasswordView.setText(strPassOld);
+        boolean bIs = DataReadWrite.getInstance().getUser().getIsRember();
+        findViewById(R.id.checkBox_rember_pass).setClickable(bIs);
     }
 
     private void populateAutoComplete() {
@@ -185,14 +239,40 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
+
+            PersonImformation.m_strAccount = email;
+            PersonImformation.m_strPassword = password;
+
             mAuthTask = new UserLoginTask(email, password);
+            mAuthTask.bIsSavePass = findViewById(R.id.checkBox_rember_pass).isClickable();
             mAuthTask.execute((Void) null);
         }
     }
 
+    private void onLogin()
+    {
+        mPasswordView = (EditText) findViewById(R.id.password);
+        mPasswordView.setText("");
+        findViewById(R.id.email).setFocusable(true);
+        ((EditText)findViewById(R.id.email)).setText("");
+
+        startActivity(new Intent("com.dfy.hospital_app.MainActivity"));
+    }
+
+    private  void onForgetPassword()
+    {
+
+    }
+
+    private  void onExit()
+    {
+        this.finish();
+    }
+
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        //return email.contains("@");
+        return email.length() == 11;
     }
 
     private boolean isPasswordValid(String password) {
@@ -262,7 +342,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+//        addEmailsToAutoComplete(emails);
     }
 
     @Override
@@ -281,14 +361,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
 
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
+//    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+//        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+//        ArrayAdapter<String> adapter =
+//                new ArrayAdapter<>(LoginActivity.this,
+//                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+//
+//        mEmailView.setAdapter(adapter);
+//    }
 
     /**
      * Represents an asynchronous login/registration task used to authenticate
@@ -298,6 +378,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         private final String mEmail;
         private final String mPassword;
+        private  boolean bIsSavePass = false;
 
         UserLoginTask(String email, String password) {
             mEmail = email;
@@ -333,7 +414,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             showProgress(false);
 
             if (success) {
-                finish();
+//                finish();
+                if(bIsSavePass)
+                    SaveLoginInformation();
+                startActivity(new Intent("com.dfy.hospital_app.MainActivity"));
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();
@@ -344,6 +429,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         protected void onCancelled() {
             mAuthTask = null;
             showProgress(false);
+        }
+
+        private void SaveLoginInformation()
+        {
+            UserEntity user = new UserEntity();
+            user.setPassword(mPassword);
+            user.setUserName(mEmail);
+            user.setIsRember(bIsSavePass);
+
+            DataReadWrite.getInstance().putUser(user);
         }
     }
 }
